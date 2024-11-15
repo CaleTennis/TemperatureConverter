@@ -2,26 +2,27 @@
 
 use TemperatureConverter::{
     Temperature, 
-    TemperatureUnit,
-
-    FAHRENHEIT_FREEZING_TEMP,
-    CELSIUS_FREEZING_TEMP,
-    KELVIN_FREEZING_TEMP,
-    RANKINE_FREEZING_TEMP,
-    DELISLE_FREEZING_TEMP,
-    NEWTON_FREEZING_TEMP,
-    REAUMUR_FREEZING_TEMP,
-    ROMER_FREEZING_TEMP,
-
-    FAHRENHEIT_BOILING_TEMP,
-    CELSIUS_BOILING_TEMP,
-    KELVIN_BOILING_TEMP,
-    RANKINE_BOILING_TEMP,
-    DELISLE_BOILING_TEMP,
-    NEWTON_BOILING_TEMP,
-    REAUMUR_BOILING_TEMP,
-    ROMER_BOILING_TEMP,
+    TemperatureUnit
 };
+
+// Constants
+const FAHRENHEIT_FREEZING_TEMP: f64 = 32.0;
+const CELSIUS_FREEZING_TEMP: f64 = 0.0;
+const KELVIN_FREEZING_TEMP: f64 = 273.15;
+const RANKINE_FREEZING_TEMP: f64 = 491.67;
+const DELISLE_FREEZING_TEMP: f64 = 150.0;
+const NEWTON_FREEZING_TEMP: f64 = 0.0;
+const REAUMUR_FREEZING_TEMP: f64 = 0.0;
+const ROMER_FREEZING_TEMP: f64 = 7.5;
+
+const FAHRENHEIT_BOILING_TEMP: f64 = 212.0;
+const CELSIUS_BOILING_TEMP: f64 = 100.0;
+const KELVIN_BOILING_TEMP: f64 = 373.15;
+const RANKINE_BOILING_TEMP: f64 = 671.67;
+const DELISLE_BOILING_TEMP: f64 = 0.0;
+const NEWTON_BOILING_TEMP: f64 = 33.0;
+const REAUMUR_BOILING_TEMP: f64 = 80.0;
+const ROMER_BOILING_TEMP: f64 = 60.0;
 
 const EPSILON: f64 = 1.0e-12;
 
@@ -39,7 +40,7 @@ fn approximately_equal(a: f64, b: f64, epsilon: f64) -> bool {
 fn test_fahrenheit_to_other_freezing_point_conversions() {
     // Freezing point in Fahrenheit
     let fahrenheit = Temperature::new(FAHRENHEIT_FREEZING_TEMP, TemperatureUnit::Fahrenheit);
-    
+
     let celsius = fahrenheit.convert_to(TemperatureUnit::Celsius);
     assert!(approximately_equal(celsius.value, CELSIUS_FREEZING_TEMP, EPSILON));
 

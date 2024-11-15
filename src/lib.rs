@@ -1,24 +1,5 @@
 // lib.rs
 
-// Constants
-pub const FAHRENHEIT_FREEZING_TEMP: f64 = 32.0;
-pub const CELSIUS_FREEZING_TEMP: f64 = 0.0;
-pub const KELVIN_FREEZING_TEMP: f64 = 273.15;
-pub const RANKINE_FREEZING_TEMP: f64 = 491.67;
-pub const DELISLE_FREEZING_TEMP: f64 = 150.0;
-pub const NEWTON_FREEZING_TEMP: f64 = 0.0;
-pub const REAUMUR_FREEZING_TEMP: f64 = 0.0;
-pub const ROMER_FREEZING_TEMP: f64 = 7.5;
-
-pub const FAHRENHEIT_BOILING_TEMP: f64 = 212.0;
-pub const CELSIUS_BOILING_TEMP: f64 = 100.0;
-pub const KELVIN_BOILING_TEMP: f64 = 373.15;
-pub const RANKINE_BOILING_TEMP: f64 = 671.67;
-pub const DELISLE_BOILING_TEMP: f64 = 0.0;
-pub const NEWTON_BOILING_TEMP: f64 = 33.0;
-pub const REAUMUR_BOILING_TEMP: f64 = 80.0;
-pub const ROMER_BOILING_TEMP: f64 = 60.0;
-
 const DEGREE_SYMBOL: &str = "\u{00B0}";
 const LOWERCASE_E_ACUTE_ACCENT: &str = "\u{00E9}";
 const LOWERCASE_O_WITH_SLASH: &str = "\u{00F8}";
@@ -37,19 +18,17 @@ pub enum TemperatureUnit {
     Romer,
 }
 
-pub const TEMP_OPTIONS: &str = "F/C/K/R/De/N/Re/Ro";
-
 impl TemperatureUnit {
     pub fn to_string(self) -> String {
         match self {
-            TemperatureUnit::Fahrenheit => format!("{DEGREE_SYMBOL}F"),
-            TemperatureUnit::Celsius    => format!("{DEGREE_SYMBOL}C"),
-            TemperatureUnit::Kelvin     => format!("K"),
-            TemperatureUnit::Rankine    => format!("{DEGREE_SYMBOL}R"),
-            TemperatureUnit::Delisle    => format!("{DEGREE_SYMBOL}De"),
-            TemperatureUnit::Newton     => format!("{DEGREE_SYMBOL}N"),
-            TemperatureUnit::Reaumur    => format!("{DEGREE_SYMBOL}R{LOWERCASE_E_ACUTE_ACCENT}"),
-            TemperatureUnit::Romer      => format!("{DEGREE_SYMBOL}R{LOWERCASE_O_WITH_SLASH}"),
+            TemperatureUnit::Fahrenheit => format!("{DEGREE_SYMBOL}F (Fahrenheit)"),
+            TemperatureUnit::Celsius    => format!("{DEGREE_SYMBOL}C (Celsius)"),
+            TemperatureUnit::Kelvin     => format!("K (Kelvin)"),
+            TemperatureUnit::Rankine    => format!("{DEGREE_SYMBOL}R (Rankine)"),
+            TemperatureUnit::Delisle    => format!("{DEGREE_SYMBOL}De (Delisle)"),
+            TemperatureUnit::Newton     => format!("{DEGREE_SYMBOL}N (Newton)"),
+            TemperatureUnit::Reaumur    => format!("{DEGREE_SYMBOL}R{LOWERCASE_E_ACUTE_ACCENT} (R{LOWERCASE_E_ACUTE_ACCENT}aumur)"),
+            TemperatureUnit::Romer      => format!("{DEGREE_SYMBOL}R{LOWERCASE_O_WITH_SLASH} (R{LOWERCASE_O_WITH_SLASH}mer)"),
         }
     }
 }
@@ -69,15 +48,15 @@ impl TemperatureUnit {
 
 impl std::fmt::Display for TemperatureUnit {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let unit_str = match self {
-            TemperatureUnit::Fahrenheit => format!("{DEGREE_SYMBOL}F"),
-            TemperatureUnit::Celsius    => format!("{DEGREE_SYMBOL}C"),
-            TemperatureUnit::Kelvin     => format!("K"),
-            TemperatureUnit::Rankine    => format!("{DEGREE_SYMBOL}R"),
-            TemperatureUnit::Delisle    => format!("{DEGREE_SYMBOL}De"),
-            TemperatureUnit::Newton     => format!("{DEGREE_SYMBOL}N"),
-            TemperatureUnit::Reaumur    => format!("{DEGREE_SYMBOL}R{LOWERCASE_E_ACUTE_ACCENT}"),
-            TemperatureUnit::Romer      => format!("{DEGREE_SYMBOL}R{LOWERCASE_O_WITH_SLASH}"),
+        let unit_str:String = match self {
+            TemperatureUnit::Fahrenheit => format!("Fahrenheit ({DEGREE_SYMBOL}F)"),
+            TemperatureUnit::Celsius    => format!("Celsius ({DEGREE_SYMBOL}C)"),
+            TemperatureUnit::Kelvin     => format!("Kelvin (K)"),
+            TemperatureUnit::Rankine    => format!("Rankine ({DEGREE_SYMBOL}R)"),
+            TemperatureUnit::Delisle    => format!("Delisle ({DEGREE_SYMBOL}De)"),
+            TemperatureUnit::Newton     => format!("Newton ({DEGREE_SYMBOL}N)"),
+            TemperatureUnit::Reaumur    => format!("R{LOWERCASE_E_ACUTE_ACCENT}aumur ({DEGREE_SYMBOL}R{LOWERCASE_E_ACUTE_ACCENT})"),
+            TemperatureUnit::Romer      => format!("R{LOWERCASE_O_WITH_SLASH}mer ({DEGREE_SYMBOL}R{LOWERCASE_O_WITH_SLASH})"),
         };
         write!(f, "{}", unit_str)
     }
@@ -180,11 +159,11 @@ impl Temperature {
     }
 
     pub fn to_string(&self) -> String {
-        format!("{}{}", format_with_commas(self.value), self.unit.to_string())
+        format!("{}{}", format_with_commas(self.value, self.unit), self.unit.to_string())
     }
 }
 
-pub fn format_with_commas(number: f64) -> String {
+pub fn format_with_commas(number: f64, unit: TemperatureUnit) -> String {
     let number_string = format!("{:.2}", number.abs());
     let float_parts: Vec<&str> = number_string.split('.').collect();
     let integer_part = float_parts[0];
@@ -202,7 +181,9 @@ pub fn format_with_commas(number: f64) -> String {
 
     result.push('.');
     result.push_str(decimal_part);
-
+    result.push_str(" ");
+    result.push_str(&unit.to_string());
+    
     if number.is_sign_negative() {
         format!("-{}", result)
     } else {
