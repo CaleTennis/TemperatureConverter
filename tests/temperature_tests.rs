@@ -10,6 +10,7 @@ use TemperatureConverter::{
     RANKINE_FREEZING_TEMP,
     DELISLE_FREEZING_TEMP,
     NEWTON_FREEZING_TEMP,
+    REAUMUR_FREEZING_TEMP,
 
     FAHRENHEIT_BOILING_TEMP,
     CELSIUS_BOILING_TEMP,
@@ -17,6 +18,7 @@ use TemperatureConverter::{
     RANKINE_BOILING_TEMP,
     DELISLE_BOILING_TEMP,
     NEWTON_BOILING_TEMP,
+    REAUMUR_BOILING_TEMP,
 };
 
 const EPSILON: f64 = 1.0e-12;
@@ -44,6 +46,9 @@ fn test_fahrenheit_to_other_freezing_point_conversions() {
 
     let newton = fahrenheit.convert_to(TemperatureUnit::Newton);
     assert!(approximately_equal(newton.value, NEWTON_FREEZING_TEMP, EPSILON));
+   
+   let reaumur = fahrenheit.convert_to(TemperatureUnit::Reaumur);
+   assert!(approximately_equal(reaumur.value, REAUMUR_FREEZING_TEMP, EPSILON));
 }
 
 #[test]
@@ -63,8 +68,10 @@ fn test_celsius_to_other_freezing_point_conversions() {
 
     let newton = celsius.convert_to(TemperatureUnit::Newton);
     assert!(approximately_equal(newton.value, NEWTON_FREEZING_TEMP, EPSILON));
-
-}
+   
+    let reaumur = celsius.convert_to(TemperatureUnit::Reaumur);
+    assert!(approximately_equal(reaumur.value, REAUMUR_FREEZING_TEMP, EPSILON));
+ }
 
 #[test]
 fn test_kelvin_to_other_freezing_point_conversions() {
@@ -83,7 +90,10 @@ fn test_kelvin_to_other_freezing_point_conversions() {
 
     let newton = kelvin.convert_to(TemperatureUnit::Newton);
     assert!(approximately_equal(newton.value, NEWTON_FREEZING_TEMP, EPSILON));
-}
+   
+    let reaumur = kelvin.convert_to(TemperatureUnit::Reaumur);
+    assert!(approximately_equal(reaumur.value, REAUMUR_FREEZING_TEMP, EPSILON));
+ }
 
 #[test]
 fn test_rankine_to_other_freezing_point_conversions() {
@@ -102,7 +112,10 @@ fn test_rankine_to_other_freezing_point_conversions() {
 
     let newton = rankine.convert_to(TemperatureUnit::Newton);
     assert!(approximately_equal(newton.value, NEWTON_FREEZING_TEMP, EPSILON));
-}
+   
+    let reaumur = rankine.convert_to(TemperatureUnit::Reaumur);
+    assert!(approximately_equal(reaumur.value, REAUMUR_FREEZING_TEMP, EPSILON));
+ }
 
 #[test]
 fn test_delisle_to_other_freezing_point_conversions() {
@@ -121,7 +134,10 @@ fn test_delisle_to_other_freezing_point_conversions() {
 
     let newton = delisle.convert_to(TemperatureUnit::Newton);
     assert!(approximately_equal(newton.value, NEWTON_FREEZING_TEMP, EPSILON));
-}
+   
+    let reaumur = delisle.convert_to(TemperatureUnit::Reaumur);
+    assert!(approximately_equal(reaumur.value, REAUMUR_FREEZING_TEMP, EPSILON));
+ }
 
 #[test]
 fn test_newton_to_other_freezing_point_conversions() {
@@ -140,8 +156,33 @@ fn test_newton_to_other_freezing_point_conversions() {
 
     let delisle = newton.convert_to(TemperatureUnit::Delisle);
     assert!(approximately_equal(delisle.value, DELISLE_FREEZING_TEMP, EPSILON));
-}
+   
+    let reaumur = newton.convert_to(TemperatureUnit::Reaumur);
+    assert!(approximately_equal(reaumur.value, REAUMUR_FREEZING_TEMP, EPSILON));
+ }
 
+ #[test]
+ fn test_reaumur_to_other_freezing_point_conversions() {
+    let reaumur = Temperature::new(REAUMUR_FREEZING_TEMP, TemperatureUnit::Reaumur);
+    
+    let fahrenheit = reaumur.convert_to(TemperatureUnit::Fahrenheit);
+    assert!(approximately_equal(fahrenheit.value, FAHRENHEIT_FREEZING_TEMP, EPSILON));
+
+    let celsius = reaumur.convert_to(TemperatureUnit::Celsius);
+    assert!(approximately_equal(celsius.value, CELSIUS_FREEZING_TEMP, EPSILON));
+
+    let kelvin = reaumur.convert_to(TemperatureUnit::Kelvin);
+    assert!(approximately_equal(kelvin.value, KELVIN_FREEZING_TEMP, EPSILON));
+
+    let rankine = reaumur.convert_to(TemperatureUnit::Rankine);
+    assert!(approximately_equal(rankine.value, RANKINE_FREEZING_TEMP, EPSILON));
+
+    let delisle = reaumur.convert_to(TemperatureUnit::Delisle);
+    assert!(approximately_equal(delisle.value, DELISLE_FREEZING_TEMP, EPSILON));
+   
+    let newton = reaumur.convert_to(TemperatureUnit::Newton);
+    assert!(approximately_equal(newton.value, NEWTON_FREEZING_TEMP, EPSILON));
+}
 
 // Boiling point conversions
 
@@ -162,6 +203,9 @@ fn test_fahrenheit_to_other_boiling_point_conversions() {
 
     let newton = fahrenheit.convert_to(TemperatureUnit::Newton);
     assert!(approximately_equal(newton.value, NEWTON_BOILING_TEMP, EPSILON));
+    
+    let reaumur = fahrenheit.convert_to(TemperatureUnit::Reaumur);
+    assert!(approximately_equal(reaumur.value, REAUMUR_BOILING_TEMP, EPSILON));
 }
 
 #[test]
@@ -181,6 +225,9 @@ fn test_celsius_to_other_boiling_point_conversions() {
 
     let newton = celsius.convert_to(TemperatureUnit::Newton);
     assert!(approximately_equal(newton.value, NEWTON_BOILING_TEMP, EPSILON));
+    
+    let reaumur = celsius.convert_to(TemperatureUnit::Reaumur);
+    assert!(approximately_equal(reaumur.value, REAUMUR_BOILING_TEMP, EPSILON));
 }
 
 #[test]
@@ -200,6 +247,9 @@ fn test_kelvin_to_other_boiling_point_conversions() {
 
     let newton = kelvin.convert_to(TemperatureUnit::Newton);
     assert!(approximately_equal(newton.value, NEWTON_BOILING_TEMP, EPSILON));
+    
+    let reaumur = kelvin.convert_to(TemperatureUnit::Reaumur);
+    assert!(approximately_equal(reaumur.value, REAUMUR_BOILING_TEMP, EPSILON));
 }
 
 #[test]
@@ -219,6 +269,9 @@ fn test_rankine_to_other_boiling_point_conversions() {
 
     let newton = rankine.convert_to(TemperatureUnit::Newton);
     assert!(approximately_equal(newton.value, NEWTON_BOILING_TEMP, EPSILON));
+    
+    let reaumur = rankine.convert_to(TemperatureUnit::Reaumur);
+    assert!(approximately_equal(reaumur.value, REAUMUR_BOILING_TEMP, EPSILON));
 }
 
 #[test]
@@ -238,6 +291,9 @@ fn test_delisle_to_other_boiling_point_conversions() {
 
     let newton = delisle.convert_to(TemperatureUnit::Newton);
     assert!(approximately_equal(newton.value, NEWTON_BOILING_TEMP, EPSILON));
+    
+    let reaumur = delisle.convert_to(TemperatureUnit::Reaumur);
+    assert!(approximately_equal(reaumur.value, REAUMUR_BOILING_TEMP, EPSILON));
 }
 
 #[test]
@@ -257,4 +313,30 @@ fn test_newton_to_other_boiling_point_conversions() {
 
     let delisle = newton.convert_to(TemperatureUnit::Delisle);
     assert!(approximately_equal(delisle.value, DELISLE_BOILING_TEMP, EPSILON));
+    
+    let reaumur = newton.convert_to(TemperatureUnit::Reaumur);
+    assert!(approximately_equal(reaumur.value, REAUMUR_BOILING_TEMP, EPSILON));
+}
+
+#[test]
+fn test_reaumur_to_other_boiling_point_conversions() {
+    let reaumur = Temperature::new(REAUMUR_BOILING_TEMP, TemperatureUnit::Reaumur);
+    let fahrenheit = reaumur.convert_to(TemperatureUnit::Fahrenheit);
+    assert!(approximately_equal(fahrenheit.value, FAHRENHEIT_BOILING_TEMP, EPSILON));
+
+    let celsius = reaumur.convert_to(TemperatureUnit::Celsius);
+    println!("Expected {} Actual {}", CELSIUS_BOILING_TEMP, celsius.value);
+    assert!(approximately_equal(celsius.value, CELSIUS_BOILING_TEMP, EPSILON));
+
+    let kelvin = reaumur.convert_to(TemperatureUnit::Kelvin);
+    assert!(approximately_equal(kelvin.value, KELVIN_BOILING_TEMP, EPSILON));
+
+    let rankine = reaumur.convert_to(TemperatureUnit::Rankine);
+    assert!(approximately_equal(rankine.value, RANKINE_BOILING_TEMP, EPSILON));
+
+    let delisle = reaumur.convert_to(TemperatureUnit::Delisle);
+    assert!(approximately_equal(delisle.value, DELISLE_BOILING_TEMP, EPSILON));
+  
+    let newton = reaumur.convert_to(TemperatureUnit::Newton);
+    assert!(approximately_equal(newton.value, NEWTON_BOILING_TEMP, EPSILON));
 }

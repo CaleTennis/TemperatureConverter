@@ -13,13 +13,14 @@ fn get_conversion_type(use_from: bool) -> Option<TemperatureUnit> {
 
         match io::stdin().read_line(&mut input) {
             Ok(_) => match input.to_uppercase().trim() {
-                "F" => return Some(TemperatureUnit::Fahrenheit),
-                "C" => return Some(TemperatureUnit::Celsius),
-                "K" => return Some(TemperatureUnit::Kelvin),
-                "R" => return Some(TemperatureUnit::Rankine),
-                "DE" => return Some(TemperatureUnit::Delisle),
-                "RE" => return Some(TemperatureUnit::Newton),
-                "QUIT" | "EXIT" => return None,
+                "F"  | "FAHRENHEIT" => return Some(TemperatureUnit::Fahrenheit),
+                "C"  | "CELSIUS"    => return Some(TemperatureUnit::Celsius),
+                "K"  | "KELVIN"     => return Some(TemperatureUnit::Kelvin),
+                "R"  | "RANKINE"    => return Some(TemperatureUnit::Rankine),
+                "DE" | "DELISLE"    => return Some(TemperatureUnit::Delisle),
+                "N"  | "NEWTON"     => return Some(TemperatureUnit::Newton),
+                "RE" | "REAUMUR"    => return Some(TemperatureUnit::Reaumur),
+                "QUIT" | "EXIT"     => return None,
                 _ => { 
                     println!("Your input must be one of {TEMP_OPTIONS}. Please type \"quit\" to exit."); 
                     continue

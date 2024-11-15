@@ -6,6 +6,7 @@ pub const KELVIN_FREEZING_TEMP: f64 = 273.15;
 pub const RANKINE_FREEZING_TEMP: f64 = 491.67;
 pub const DELISLE_FREEZING_TEMP: f64 = 150.0;
 pub const NEWTON_FREEZING_TEMP: f64 = 0.0;
+pub const REAUMUR_FREEZING_TEMP: f64 = 0.0;
 
 pub const FAHRENHEIT_BOILING_TEMP: f64 = 212.0;
 pub const CELSIUS_BOILING_TEMP: f64 = 100.0;
@@ -13,6 +14,7 @@ pub const KELVIN_BOILING_TEMP: f64 = 373.15;
 pub const RANKINE_BOILING_TEMP: f64 = 671.67;
 pub const DELISLE_BOILING_TEMP: f64 = 0.0;
 pub const NEWTON_BOILING_TEMP: f64 = 33.0;
+pub const REAUMUR_BOILING_TEMP: f64 = 80.0;
 
 const DEGREE_SYMBOL: &str = "\u{00B0}";
 const LOWERCASE_E_ACUTE_ACCENT: &str = "\u{00E9}";
@@ -25,9 +27,10 @@ pub enum TemperatureUnit {
     Rankine,
     Delisle,
     Newton,
+    Reaumur,
 }
 
-pub const TEMP_OPTIONS: &str = "F/C/K/R/De/Re";
+pub const TEMP_OPTIONS: &str = "F/C/K/R/De/N/Re";
 
 impl TemperatureUnit {
     pub fn to_string(self) -> String {
@@ -37,7 +40,8 @@ impl TemperatureUnit {
             TemperatureUnit::Kelvin => format!("K"),
             TemperatureUnit::Rankine => format!("{DEGREE_SYMBOL}R"),
             TemperatureUnit::Delisle => format!("{DEGREE_SYMBOL}De"),
-            TemperatureUnit::Newton => format!("{DEGREE_SYMBOL}R{LOWERCASE_E_ACUTE_ACCENT}"),
+            TemperatureUnit::Newton => format!("{DEGREE_SYMBOL}N"),
+            TemperatureUnit::Reaumur => format!("{DEGREE_SYMBOL}R{LOWERCASE_E_ACUTE_ACCENT}")
         }
     }
 }
@@ -59,37 +63,49 @@ impl Temperature {
             (TemperatureUnit::Fahrenheit, TemperatureUnit::Rankine) => self.value + 459.67,
             (TemperatureUnit::Fahrenheit, TemperatureUnit::Delisle) => ((212.0 - self.value) / 6.0) * 5.0,
             (TemperatureUnit::Fahrenheit, TemperatureUnit::Newton) => ((self.value - 32.0) / 60.0) * 11.0,
+            (TemperatureUnit::Fahrenheit, TemperatureUnit::Reaumur) => ((self.value - 32.0) / 9.0) * 4.0,
 
             (TemperatureUnit::Celsius, TemperatureUnit::Fahrenheit) => (self.value * 1.8) + 32.0,
             (TemperatureUnit::Celsius, TemperatureUnit::Kelvin) => self.value + 273.15,
             (TemperatureUnit::Celsius, TemperatureUnit::Rankine) => (self.value * 1.8) + 491.67,
             (TemperatureUnit::Celsius, TemperatureUnit::Delisle) => ((100.0 - self.value) / 2.0) * 3.0,
             (TemperatureUnit::Celsius, TemperatureUnit::Newton) => (self.value / 100.0) * 33.0,
+            (TemperatureUnit::Celsius, TemperatureUnit::Reaumur) => (self.value / 5.0) * 4.0,
 
             (TemperatureUnit::Kelvin, TemperatureUnit::Fahrenheit) => ((self.value - 273.15) * 1.8) + 32.0,
             (TemperatureUnit::Kelvin, TemperatureUnit::Celsius) => self.value - 273.15,
             (TemperatureUnit::Kelvin, TemperatureUnit::Rankine) =>  ((self.value - 273.15) * 1.8) + 491.67,
             (TemperatureUnit::Kelvin, TemperatureUnit::Delisle) => ((373.15 - self.value ) / 2.0) * 3.0,
             (TemperatureUnit::Kelvin, TemperatureUnit::Newton) => ((self.value - 273.15) / 100.0) * 33.0,
+            (TemperatureUnit::Kelvin, TemperatureUnit::Reaumur) => (self.value - 273.15) * 0.8,
 
             (TemperatureUnit::Rankine, TemperatureUnit::Fahrenheit) => self.value - 459.67,
             (TemperatureUnit::Rankine, TemperatureUnit::Celsius) => (self.value - 491.67) / 1.8,
             (TemperatureUnit::Rankine, TemperatureUnit::Kelvin) =>  ((self.value - 491.67) / 1.8) + 273.15,
             (TemperatureUnit::Rankine, TemperatureUnit::Delisle) => ((671.67 - self.value) / 6.0) * 5.0,
             (TemperatureUnit::Rankine, TemperatureUnit::Newton) => ((self.value - 491.67) / 60.0) * 11.0,
+            (TemperatureUnit::Rankine, TemperatureUnit::Reaumur) => ((self.value - 491.67) / 9.0) * 4.0,
 
             (TemperatureUnit::Delisle, TemperatureUnit::Fahrenheit) => 212.0 - ((self.value / 5.0) * 6.0),
             (TemperatureUnit::Delisle, TemperatureUnit::Celsius) => 100.0 - ((self.value / 3.0) * 2.0),
             (TemperatureUnit::Delisle, TemperatureUnit::Kelvin) => 373.15 - ((self.value / 3.0) * 2.0),
             (TemperatureUnit::Delisle, TemperatureUnit::Rankine) => 671.67 - ((self.value / 5.0) * 6.0),
             (TemperatureUnit::Delisle, TemperatureUnit::Newton) => 33.0 - ((self.value / 50.0) * 11.0),
+            (TemperatureUnit::Delisle, TemperatureUnit::Reaumur) => 80.0 - ((self.value / 15.0) * 8.0),
 
             (TemperatureUnit::Newton, TemperatureUnit::Fahrenheit) => ((self.value / 11.0) * 60.0) + 32.0,
             (TemperatureUnit::Newton, TemperatureUnit::Celsius) => (self.value / 33.0) * 100.0,
             (TemperatureUnit::Newton, TemperatureUnit::Kelvin) => ((self.value / 33.0) * 100.0) + 273.15,
             (TemperatureUnit::Newton, TemperatureUnit::Rankine) => ((self.value / 11.0) * 60.0) + 491.67,
             (TemperatureUnit::Newton, TemperatureUnit::Delisle) => ((33.0 - self.value) / 11.0) * 50.0,
+            (TemperatureUnit::Newton, TemperatureUnit::Reaumur) => (self.value / 33.0) * 80.0,
 
+            (TemperatureUnit::Reaumur, TemperatureUnit::Fahrenheit) => (self.value * 2.25) + 32.0, // New for Reaumur
+            (TemperatureUnit::Reaumur, TemperatureUnit::Celsius) => (self.value / 4.0) * 5.0,
+            (TemperatureUnit::Reaumur, TemperatureUnit::Kelvin) => (self.value / 0.8) + 273.15, 
+            (TemperatureUnit::Reaumur, TemperatureUnit::Rankine) => (self.value * 2.25) + 491.67, 
+            (TemperatureUnit::Reaumur, TemperatureUnit::Delisle) => ((80.0 - self.value) / 8.0) * 15.0,
+            (TemperatureUnit::Reaumur, TemperatureUnit::Newton) => (self.value / 80.0) * 33.0,
 
             // To & from the same unit
             (_, _) => self.value,
