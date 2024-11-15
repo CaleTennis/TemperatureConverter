@@ -24,9 +24,10 @@ const LOWERCASE_E_ACUTE_ACCENT: &str = "\u{00E9}";
 const LOWERCASE_O_WITH_SLASH: &str = "\u{00F8}";
 
 // Temperature enumeration and struct
-#[derive(Debug, PartialEq, Copy, Clone)]
+#[derive(Debug, Default, PartialEq, Copy, Clone, Eq)]
 pub enum TemperatureUnit {
-    Fahrenheit,
+    #[default]
+    Fahrenheit ,
     Celsius,
     Kelvin,
     Rankine,
@@ -50,6 +51,35 @@ impl TemperatureUnit {
             TemperatureUnit::Reaumur    => format!("{DEGREE_SYMBOL}R{LOWERCASE_E_ACUTE_ACCENT}"),
             TemperatureUnit::Romer      => format!("{DEGREE_SYMBOL}R{LOWERCASE_O_WITH_SLASH}"),
         }
+    }
+}
+
+impl TemperatureUnit {
+    pub const ALL: [TemperatureUnit; 8] =[
+        TemperatureUnit::Fahrenheit,
+        TemperatureUnit::Celsius,
+        TemperatureUnit::Kelvin,
+        TemperatureUnit::Rankine,
+        TemperatureUnit::Delisle,
+        TemperatureUnit::Newton,
+        TemperatureUnit::Reaumur,
+        TemperatureUnit::Romer,
+    ];
+}
+
+impl std::fmt::Display for TemperatureUnit {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let unit_str = match self {
+            TemperatureUnit::Fahrenheit => format!("{DEGREE_SYMBOL}F"),
+            TemperatureUnit::Celsius    => format!("{DEGREE_SYMBOL}C"),
+            TemperatureUnit::Kelvin     => format!("K"),
+            TemperatureUnit::Rankine    => format!("{DEGREE_SYMBOL}R"),
+            TemperatureUnit::Delisle    => format!("{DEGREE_SYMBOL}De"),
+            TemperatureUnit::Newton     => format!("{DEGREE_SYMBOL}N"),
+            TemperatureUnit::Reaumur    => format!("{DEGREE_SYMBOL}R{LOWERCASE_E_ACUTE_ACCENT}"),
+            TemperatureUnit::Romer      => format!("{DEGREE_SYMBOL}R{LOWERCASE_O_WITH_SLASH}"),
+        };
+        write!(f, "{}", unit_str)
     }
 }
 

@@ -2,73 +2,111 @@
 use std::io;
 
 use TemperatureConverter::{Temperature, TemperatureUnit, TEMP_OPTIONS};
+use iced::{button, pick_list, text_input, Alignment, Button, Column, Container, Element,
+Length, PickList, Sandbox, Settings, Text, TextInput, 
+};
 
-fn get_conversion_type(use_from: bool) -> Option<TemperatureUnit> {
-    loop {
-        let mut input = String::new();
-        println!(
-            "What unit would you like to convert {} ({TEMP_OPTIONS})?",
-            if use_from { "from" } else { "to" }
-        );
-
-        match io::stdin().read_line(&mut input) {
-            Ok(_) => match input.to_uppercase().trim() {
-                "F"  | "FAHRENHEIT" => return Some(TemperatureUnit::Fahrenheit),
-                "C"  | "CELSIUS"    => return Some(TemperatureUnit::Celsius),
-                "K"  | "KELVIN"     => return Some(TemperatureUnit::Kelvin),
-                "R"  | "RANKINE"    => return Some(TemperatureUnit::Rankine),
-                "DE" | "DELISLE"    => return Some(TemperatureUnit::Delisle),
-                "N"  | "NEWTON"     => return Some(TemperatureUnit::Newton),
-                "RE" | "REAUMUR"    => return Some(TemperatureUnit::Reaumur),
-                "QUIT" | "EXIT"     => return None,
-                _ => { 
-                    println!("Your input must be one of {TEMP_OPTIONS}. Please type \"quit\" to exit."); 
-                    continue
-                }
-            },
-            Err(_) => continue,  
-        } 
-    }
+#[derive(Default)]
+struct TemperatureConverterStruct {
+    input_value: String,
+    input_unit: TemperatureUnit,
+    output_unit: TemperatureUnit,
+    result: Option<f64>,
+    input_unit_list: pick_list::State<TemperatureUnit>,
+    output_unit_list: pick_list::State<TemperatureUnit>,
+    convert_button: button::State,
+    input_value_state: text_input::State,
 }
 
-fn get_temperature() -> f64 {
-    loop {
-        let mut input = String::new();
-        println!("What is the temperature you would like to convert?");
-        
-        match io::stdin().read_line(&mut input) {
-            Ok(_) => match input.trim().parse::<f64>() {
-                Ok(temp) => return temp,
-                Err(_) => { 
-                    println!("Please enter a valid number first, even if you wish to quit."); 
-                    continue;
-                } 
-            }, 
-            Err(_) => continue,
-        } 
-    };
+#[derive(Debug, Clone)]
+enum Message {
+    InputChanged(String),
+    InputUnitChanged(TemperatureUnit),
+    OutputUnitChanged(TemperatureUnit),
+    ConvertPressed,
+}
+
+impl Sandbox for TemperatureConverterStruct {
+    type Message = Message;
+
+    fn new() -> Self {
+        TemperatureConverterStruct::default()
+    }
+
+    fn title(&self) -> String {
+        String::from("Temperature Converter")
+    }
+
+    fn update(&mut self, message: Message) {
+        match message {
+            Message::InputChanged(value) => {
+                self.input_value = value;
+            }
+            Message::InputUnitChanged(unit) => {
+                self.input_unit = unit;
+            }
+            Message::OutputUnitChanged(unit) => {
+                self.output_unit = unit;
+            }
+            Message::ConvertPressed => {
+                if let Ok(value) = self.input_value.parse::<f64>() {
+                    let temp = Temperature::new(value, self.input_unit);
+                    let converted = temp.convert_to(self.output_unit);
+                    self.result = Some(converted.value);
+                } else {
+                    self.result = None;
+                }
+            }
+        }
+    }
+
+    fn view(&mut self) -> Element<Message> {
+        let input = TextInput::new(
+            &mut self.input_value_state,
+            "Enter value of temperature...",
+            &self.input_value,
+            Message::InputChanged,
+        )
+        .padding(10)
+        .size(20);
+
+        let input_unit = PickList::new(
+            &mut self.input_unit_list,
+            &TemperatureUnit::ALL[..],
+            Some(self.input_unit),
+            Message::InputUnitChanged,
+        );
+
+        let output_unit = PickList::new(
+            &mut self.output_unit_list,
+            &TemperatureUnit::ALL[..],
+            Some(self.output_unit),
+            Message::OutputUnitChanged,
+        );
+
+        let convert_button = Button::new(&mut self.convert_button, Text::new("Convert"))
+            .on_press(Message::ConvertPressed);
+
+        let result_text = if let Some(result) = self.result {
+            Text::new(format!("Result: {:.2}", result))
+        } else {
+            Text::new("Invalid input or calculation error")
+        };
+
+        Column::new()
+            .padding(20)
+            .align_items(Alignment::Center)
+            .spacing(10)
+            .push(input)
+            .push(input_unit)
+            .push(output_unit)
+            .push(convert_button)
+            .push(result_text)
+            .into()
+    }
 }
 
 fn main() {
-    loop {
-        let from_unit: TemperatureUnit = match get_conversion_type(true) {
-            Some(value) => value,
-            None => break,
-        };
-
-        let to_unit: TemperatureUnit = match get_conversion_type(false) {
-            Some(value) => value,
-            None => break,
-        };
-        
-        let temp_value: f64 = get_temperature();
-        let temp = Temperature::new(temp_value, from_unit);
-        let converted_temp = temp.convert_to(to_unit);
-
-        println!(
-            "{} = {}",
-            temp.to_string(),
-            converted_temp.to_string(),
-        );
-    }
+    
+    TemperatureConverterStruct::run(Settings::default()).expect("Exited unexpectedly");
 }
