@@ -16,6 +16,7 @@ Converts temperatures from one unit to another
 - Delisle
 - Newton
 - Reaumur
+- Romer
 
 ## Common Mistakes
 - Do not include the degrees symbols when stating what units you would like to choose, this is taken care of for you!
