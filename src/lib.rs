@@ -159,15 +159,21 @@ impl Temperature {
     }
 
     pub fn to_string(&self) -> String {
-        format!("{}{}", format_with_commas(self.value, self.unit), self.unit.to_string())
+        format!("{}{}", format_with_commas(self.value, self.unit, 2), self.unit.to_string())
     }
 }
 
-pub fn format_with_commas(number: f64, unit: TemperatureUnit) -> String {
-    let number_string = format!("{:.2}", number.abs());
+pub fn format_with_commas(number: f64, unit: TemperatureUnit, decimal_precision: u8) -> String {
+    let number_string = format!("{:.1$}", number.abs(), decimal_precision.into());
     let float_parts: Vec<&str> = number_string.split('.').collect();
     let integer_part = float_parts[0];
-    let decimal_part = float_parts.get(1).unwrap();
+    let decimal_part: &str;
+    
+    if decimal_precision != 0 {
+        decimal_part = float_parts.get(1).unwrap();
+    } else {
+        decimal_part = "";
+    }
 
     let len = integer_part.len();
     let mut result = String::new();
@@ -179,8 +185,11 @@ pub fn format_with_commas(number: f64, unit: TemperatureUnit) -> String {
         result.push(c);
     }
 
-    result.push('.');
-    result.push_str(decimal_part);
+    if decimal_precision != 0 {
+        result.push('.');
+        result.push_str(decimal_part);
+    }
+    
     result.push_str(" ");
     result.push_str(&unit.to_string());
     
@@ -188,5 +197,15 @@ pub fn format_with_commas(number: f64, unit: TemperatureUnit) -> String {
         format!("-{}", result)
     } else {
         result
+    }
+}
+
+pub fn warn_below_absolute_zero(temp: f64, unit: TemperatureUnit) -> String {
+    if Temperature::new(0.0, TemperatureUnit::Kelvin).convert_to(unit).value > temp
+    {
+        String::from(" (note: this temperature is below absolute zero)")
+    }
+    else {
+        String::new()
     }
 }

@@ -9,7 +9,7 @@ Converts temperatures from one unit to another
 2. Select unit you would like to convert to
 3. Enter the temperature (in the current unit)
 
-## Supported Units
+### Supported Units
 - Fahrenheit
 - Celsius
 - Kelvin
@@ -19,6 +19,7 @@ Converts temperatures from one unit to another
 - Reaumur
 - Romer
 
-## Tips
-- You can include commas and whitespace when typing your number if it makes it easier for you to ready your input
-- The converter supports both negative and decimal numbers as inputs
+### Tips
+- Can include commas and whitespace when typing temperature in
+- The converter supports both negative and decimal numbers
+- You can adjust the decimal precision by moving the "Precision" slider
